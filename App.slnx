@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Src/" />
+  <Folder Name="/Src/API/">
+    <Project Path="App.API/App.API.csproj" />
+  </Folder>
+  <Folder Name="/Src/Core/">
+    <Project Path="App.Application/App.Application.csproj" />
+    <Project Path="App.Domain/App.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Src/Infrastructure/">
+    <Project Path="App.Bus/App.Bus.csproj" Id="577b9606-d6c2-4be4-bf77-8cad19446878" />
+    <Project Path="App.Caching/App.Caching.csproj" Id="b48328de-87a6-4a79-be02-fdc9d13bfb04" />
+    <Project Path="App.Persistence/App.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Test/" />
+</Solution>
