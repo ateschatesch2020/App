@@ -50,10 +50,10 @@ namespace App.Application.Features.Products
         {
             var product = await productRepository.GetByIdAsync(id);
 
-            if(product is null)
-            {
-                return ServiceResult.Fail("there is no product with this id", System.Net.HttpStatusCode.NotFound);
-            }
+            //if(product is null)
+            //{
+            //    return ServiceResult.Fail("there is no product with this id", System.Net.HttpStatusCode.NotFound);
+            //}
 
             productRepository.Delete(product);
             await unitOfWork.SaveChangesAsync();

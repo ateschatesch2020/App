@@ -28,9 +28,14 @@ namespace App.Application.Features.Categories
             return ServiceResult<int>.SuccessAsCreated(newCategory.Id, $"api/categories/{newCategory.Id}");
         }
 
-        public Task<ServiceResult> DeleteAsync(int id)
+        public async Task<ServiceResult> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await categoryRepository.GetByIdAsync(id);
+
+
+            categoryRepository.Delete(category);
+            unitOfWork.SaveChangesAsync();
+            return ServiceResult.Success(System.Net.HttpStatusCode.NoContent);
         }
 
         public async Task<ServiceResult<List<CategoryDto>>> GetAllListAsync()

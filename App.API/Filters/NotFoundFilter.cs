@@ -29,7 +29,7 @@ namespace App.API.Filters
             var entityName = typeof(T).Name;
             var actionName = context.ActionDescriptor.RouteValues["action"];
 
-            var result = ServiceResult.Fail($"data bulunamamıştır.({entityName})({actionName})");
+            var result = ServiceResult.Fail($"Data cannot be found.({entityName})({actionName})");
             context.Result = new NotFoundObjectResult(result);
 
 

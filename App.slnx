@@ -13,4 +13,5 @@
     <Project Path="App.Persistence/App.Persistence.csproj" />
   </Folder>
   <Folder Name="/Test/" />
+  <Project Path="App.Test/App.Test.csproj" Id="731a0464-19c5-4810-ab0d-5edd675aa5aa" />
 </Solution>

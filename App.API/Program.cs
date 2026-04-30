@@ -1,11 +1,14 @@
 using App.API.ExceptionHandlers;
 using App.API.Extensions;
 using App.API.Filters;
+using App.API.Modules;
 using App.Application.Contracts.Caching;
 using App.Application.Extensions;
 using App.Caching;
 using App.Persistence;
 using App.Persistence.Extensions;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using CleanApp.API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +25,9 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
 
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
 
 var app = builder.Build();
 

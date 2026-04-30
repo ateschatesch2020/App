@@ -19,8 +19,8 @@ namespace App.Application.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICategoryService, CategoryService>();
+            //services.AddScoped<IProductService, ProductService>(); // done with autofac
+            //services.AddScoped<ICategoryService, CategoryService>();
 
 
             services.AddFluentValidationAutoValidation();

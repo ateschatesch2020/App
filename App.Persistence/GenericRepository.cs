@@ -22,7 +22,7 @@ namespace App.Persistence
 
         public Task<List<T>> GetAllAsync()
         {
-            return _dbSet.ToListAsync();
+            return _dbSet.AsNoTracking().AsQueryable().ToListAsync();
         }
 
         public Task<List<T>> GetAllPagedAsync(int pageNumber, int pageSize)
@@ -36,9 +36,9 @@ namespace App.Persistence
 
         public ValueTask<T?> GetByIdAsync(int id) => _dbSet.FindAsync(id);
 
-        public async ValueTask AddAsync(T entity) => await _dbSet .AddAsync(entity);
+        public async ValueTask AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
-        public void Update(T entity) => _dbSet.Update(entity);
+        public void Update(T entity) => _dbSet.Update(entity); // means _context.Entry(entity).State = EntityState.Modified; therefore there is no need to be async
 
         public void Delete(T entity) => _dbSet.Remove(entity);
     }
