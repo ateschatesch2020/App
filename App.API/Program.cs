@@ -10,6 +10,7 @@ using App.Persistence.Extensions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CleanApp.API.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,14 +26,47 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
 
+#region identity context
+AddIdentityFeature(builder);
+
+#endregion
+
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoServiceModule()));
 
 var app = builder.Build();
 
+
+// Seed
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await IdentitySeeder.SeedAsync(userManager, roleManager);
+}
+
 app.UseConfigurePipelineExt();
 
 app.MapControllers();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+
 app.Run();
+
+static void AddIdentityFeature(WebApplicationBuilder builder)
+{
+    var connectionString = builder.Configuration.GetSection
+                  (ConnectionStringOption.Key).Get<ConnectionStringOption>();
+
+    builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+         options.UseSqlServer(connectionString!.SqlServer)); // direkt kullan, GetConnectionString() değil
+
+    builder.Services
+        .AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<AppIdentityDbContext>()
+        .AddDefaultTokenProviders();
+}

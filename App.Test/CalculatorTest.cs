@@ -6,7 +6,7 @@ using System.Text;
 
 namespace App.Test
 {
-  
+
     public class CalculatorTest
     {
         public Calculator Calculator { get; set; }
@@ -38,7 +38,7 @@ namespace App.Test
             Assert.Contains("Bob", names);
             Assert.Contains(names, x => x.StartsWith("C"));
 
-            Assert.True(5>3);
+            Assert.True(5 > 3);
             Assert.False("".GetType() == typeof(int));
 
             Assert.Matches(@"^\d{3}-\d{2}-\d{4}$", "123-45-6789");
@@ -107,7 +107,7 @@ namespace App.Test
         public void Multiply_zeroValues_ReturnZeroValue(int a, int b)
         {
             Mymock.Setup(x => x.Multiply(a, b)).Throws(new Exception("Multiplication by zero is not allowed."));
-            var ex= Assert.Throws<Exception>(() => Calculator.Multiply(a, b));
+            var ex = Assert.Throws<Exception>(() => Calculator.Multiply(a, b));
             Assert.Equal("Multiplication by zero is not allowed.", ex.Message);
         }
     }

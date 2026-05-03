@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Src/" />
   <Folder Name="/Src/API/">
+    <File Path=".dockerignore" />
     <Project Path="App.API/App.API.csproj" />
   </Folder>
   <Folder Name="/Src/Core/">
@@ -13,5 +14,6 @@
     <Project Path="App.Persistence/App.Persistence.csproj" />
   </Folder>
   <Folder Name="/Test/" />
+  <Project Path="App.ConsoleDocker/App.ConsoleDocker.csproj" Id="15c4e4d7-08be-43ff-b746-7ca917610f7d" />
   <Project Path="App.Test/App.Test.csproj" Id="731a0464-19c5-4810-ab0d-5edd675aa5aa" />
 </Solution>

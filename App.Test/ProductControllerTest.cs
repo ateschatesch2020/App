@@ -1,10 +1,18 @@
 ﻿using App.API.Controllers;
 using App.Application;
+using App.Application.Contracts.Caching;
 using App.Application.Contracts.Persistence;
 using App.Application.Features.Products;
+using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
 using App.Domain.Entities;
+using App.Persistence;
+using App.Persistence.Products;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -15,12 +23,33 @@ namespace App.Test
 {
     public class ProductControllerTest
     {
-        private readonly Mock<IProductService> _mockProductService;
-        private readonly ProductsController _controller;
+        protected readonly Mock<IProductService> _mockProductService;
+        protected readonly ProductsController _controller;
 
         private List<Product> _products;
         private ServiceResult<List<ProductDto>> _serviceResult;
 
+        protected DbContextOptions<AppDbContext> _dbContextOptions { get; private set; }
+
+        public void SetContextOptions(DbContextOptions<AppDbContext> options)
+        {
+            _dbContextOptions = options;
+            Seed();
+        }   
+
+        public void Seed()
+        {
+            using(var context = new AppDbContext(_dbContextOptions))
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                context.Categories.Add(new Category() { Name = "Computer Science" });
+                context.Categories.Add(new Category() { Name = "Civil Engineering" });
+                context.SaveChanges();
+                context.Products.Add(new Product() { Name = "Data Structures", Price = 100, Stock = 10, CategoryId = 1 });
+                context.Products.Add(new Product() { Name = "Algorithms", Price = 80, Stock = 5, CategoryId = 1 });
+            }
+        }
         public ProductControllerTest()
         {
             _mockProductService = new Mock<IProductService>();
@@ -35,6 +64,39 @@ namespace App.Test
                 new ProductDto(1, "Algorithms", 100, 10, 1), };
             _serviceResult = new ServiceResult<List<ProductDto>>();
             _serviceResult.Data = list;
+        }
+
+        /// <summary>
+        /// Creates a real ProductService with in-memory DB (without mocks)
+        /// </summary>
+        protected IProductService CreateRealProductService(AppDbContext context)
+        {
+            // Setup AutoMapper using ServiceCollection (same way as in production)
+            var services = new ServiceCollection();
+            services.AddLogging(); // Required by AutoMapper
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<App.Application.Features.Products.ProductMappingProfile>();
+            });
+            var serviceProvider = services.BuildServiceProvider();
+            var mapper = serviceProvider.GetRequiredService<IMapper>();
+
+            // Create real repository and unit of work instances
+            var productRepository = new ProductRepository(context);
+            var unitOfWork = new UnitOfWork(context);
+
+             
+            var validatorMock = new Mock<IValidator<CreateProductRequest>>();
+            var cacheServiceMock = new Mock<ICacheService>();
+
+            // Create and return real ProductService
+            return new ProductService(
+                productRepository,
+                unitOfWork,
+                validatorMock.Object,
+                mapper,
+                cacheServiceMock.Object
+            );
         }
 
 
