@@ -1,6 +1,8 @@
 ﻿using App.API.Filters;
+using App.Application.DesignPatterns.CommandPattern;
 using App.Application.Features.Products;
 using App.Application.Features.Products.Create;
+using App.Application.Features.Products.Dto;
 using App.Application.Features.Products.Update;
 using App.Application.Features.Products.UpdateStock;
 using App.Domain.Entities;
@@ -34,5 +36,8 @@ namespace App.API.Controllers
         [ServiceFilter(typeof(NotFoundFilter<Product, int>))]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id) => CreateActionResult(await productService.DeleteAsync(id));
+
+        [HttpGet("{type:int}/excel")]
+        public async Task<IActionResult> GetExcel(int type) => await productService.CreateFile(type);
     }
 }

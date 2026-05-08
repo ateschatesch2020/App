@@ -1,32 +1,39 @@
 ﻿using App.Application.Contracts.Caching;
 using App.Application.Contracts.Persistence;
+using App.Application.DesignPatterns.CommandPattern;
+using App.Application.DesignPatterns.CommandPattern.Commands;
 using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
 using App.Application.Features.Products.Update;
 using App.Application.Features.Products.UpdateStock;
 using App.Domain.Entities;
 using AutoMapper;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Text;
 
 namespace App.Application.Features.Products
 {
     public class ProductService(IProductRepository productRepository,
-        IUnitOfWork unitOfWork,
-        IValidator<CreateProductRequest> createValidator,
-        IMapper mapper,
-        ICacheService cacheService) : IProductService
+            IUnitOfWork unitOfWork,
+            IValidator<CreateProductRequest> createValidator,
+            IMapper mapper,
+            ICacheService cacheService,
+            IHttpContextAccessor httpContextAccessor) : IProductService
     {
         private const string ProductListCacheKey = "ProductListCacheKey";
 
         public async Task<ServiceResult<CreateProductResponse>> CreateAsync(CreateProductRequest request)
         {
             // 2.way manuel async validation with repository
-            var anyProduct = await productRepository.AnyAsync(x=>x.Name == request.Name);
+            var anyProduct = await productRepository.AnyAsync(x => x.Name == request.Name);
 
-            if(anyProduct)
+            if (anyProduct)
             {
                 return ServiceResult<CreateProductResponse>.Fail(new List<string> { "there is already this product in db" });
             }
@@ -38,7 +45,7 @@ namespace App.Application.Features.Products
             //    return ServiceResult<CreateProductResponse>.Fail(errors);
             //}
 
-            var product = mapper.Map<Product> (request);
+            var product = mapper.Map<Product>(request);
 
             await productRepository.AddAsync(product);
             await unitOfWork.SaveChangesAsync();
@@ -96,7 +103,7 @@ namespace App.Application.Features.Products
         {
             var product = await productRepository.GetByIdAsync(id);
 
-            if(product == null)
+            if (product == null)
             {
                 return ServiceResult<ProductDto?>.Fail("there is no product with this id", System.Net.HttpStatusCode.NotFound);
             }
@@ -131,7 +138,7 @@ namespace App.Application.Features.Products
             product.Id = id;
 
             productRepository.Update(product);
-            await unitOfWork.SaveChangesAsync();    
+            await unitOfWork.SaveChangesAsync();
 
             return ServiceResult.Success(System.Net.HttpStatusCode.NoContent);
         }
@@ -140,7 +147,7 @@ namespace App.Application.Features.Products
         {
             var product = productRepository.GetByIdAsync(request.ProductId).Result;
 
-            if(product is null)
+            if (product is null)
             {
                 return ServiceResult.Fail("there is no product with this id", System.Net.HttpStatusCode.NotFound);
             }
@@ -151,5 +158,35 @@ namespace App.Application.Features.Products
 
             return ServiceResult.Success(System.Net.HttpStatusCode.NoContent);
         }
+
+        public async Task<IActionResult> CreateFile(int type)
+        {
+            var products = await productRepository.GetAllAsync();
+
+            FileCreateInvoker fileCreateInvoker = new();
+
+            EnumFileType fileType = (EnumFileType)type;
+
+            switch (fileType)
+            {
+                case EnumFileType.Excel:
+                    ExcelFile<Product> excelFile = new(products);
+
+                    fileCreateInvoker.SetCommand(new CreateExcelTableActionCommand<Product>(excelFile));
+
+                    break;
+
+                case EnumFileType.Pdf:
+                    PdfFile<Product> pdfFile = new(products, httpContextAccessor.HttpContext);
+                    fileCreateInvoker.SetCommand(new CreatePdfTableActionCommand<Product>(pdfFile));
+                    break;
+
+                default:
+                    break;
+            }
+
+            return fileCreateInvoker.CreateFile();
+        }
+
     }
 }

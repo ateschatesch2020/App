@@ -10,6 +10,8 @@ using App.Persistence.Extensions;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CleanApp.API.Extensions;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithFiltersExt().AddExceptionHandlerExt().AddCachingExt();
 
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 //builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -2,6 +2,7 @@
 using App.Application.Features.Products.Dto;
 using App.Application.Features.Products.Update;
 using App.Application.Features.Products.UpdateStock;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,5 +23,7 @@ namespace App.Application.Features.Products
         Task<ServiceResult> UpdateStockAsync(UpdateProductStockRequest request);
 
         Task<ServiceResult> DeleteAsync(int id);
+
+        Task<IActionResult> CreateFile(int type);
     }
 }

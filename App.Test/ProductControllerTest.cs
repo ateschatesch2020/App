@@ -10,6 +10,7 @@ using App.Persistence;
 using App.Persistence.Products;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,13 +90,16 @@ namespace App.Test
             var validatorMock = new Mock<IValidator<CreateProductRequest>>();
             var cacheServiceMock = new Mock<ICacheService>();
 
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+
+
             // Create and return real ProductService
             return new ProductService(
                 productRepository,
                 unitOfWork,
                 validatorMock.Object,
                 mapper,
-                cacheServiceMock.Object
+                cacheServiceMock.Object, httpContextAccessor.Object
             );
         }
 
