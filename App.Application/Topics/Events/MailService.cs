@@ -12,7 +12,8 @@ namespace App.Application.Topics.Events
             VideoEncoder videoEncoder = new();
             videoEncoder.VideoEncoded += OnVideoEncoded;
             videoEncoder.VideoEncodedWithEventHandler += OnVideoEncoded;
-            videoEncoder.VideoEncodedWithParameterEventHandler += OnVideoEncodedWithParameter;
+            videoEncoder.VideoEncodedWithParameter += OnVideoEncodedWithParameter;
+            videoEncoder.VideoEncodedWithEventHandlerWithParameter += OnVideoEncodedWithParameter;
         }
 
         // Matches EventHandler (allows nullable sender)

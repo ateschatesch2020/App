@@ -18,6 +18,7 @@ namespace App.Application.Topics.Events
         public event VideoEncodedEventHandler? VideoEncoded;
 
         public EventHandler? VideoEncodedWithEventHandler;
+        public EventHandler<VideoEventArgs>? VideoEncodedWithEventHandlerWithParameter;
 
         public void Encode(Video video)
         {
