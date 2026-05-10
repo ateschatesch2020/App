@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace App.Application.DesignPatterns.CommandPattern
+namespace App.DesignPatterns.DesignPatterns.Behavioral.CommandPattern
 {
     public enum EnumFileType
     {

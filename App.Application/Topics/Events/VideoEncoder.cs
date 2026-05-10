@@ -31,11 +31,15 @@ namespace App.Application.Topics.Events
         protected virtual void OnVideoEncoded()
         {
             if(VideoEncoded != null) VideoEncoded(this, EventArgs.Empty);
+            //if(VideoEncodedWithEventHandler is not null) VideoEncodedWithEventHandler(this, EventArgs.Empty);
+            
         }
 
         protected virtual void OnVideoEncodedWithParameter(Video video)
         {
             if (VideoEncodedWithParameter != null) VideoEncodedWithParameter(this, new VideoEventArgs() { Video = video });
+            if(VideoEncodedWithEventHandlerWithParameter is not null) VideoEncodedWithEventHandlerWithParameter(this,
+                new VideoEventArgs() { Video = video });
         }
     }
 }

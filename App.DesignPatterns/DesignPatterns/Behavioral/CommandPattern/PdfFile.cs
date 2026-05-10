@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using DinkToPdf.Contracts;
 
-namespace App.Application.DesignPatterns.CommandPattern
+namespace App.DesignPatterns.DesignPatterns.Behavioral.CommandPattern
 {
     public class PdfFile<T>
     {//Receiver

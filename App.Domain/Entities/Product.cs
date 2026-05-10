@@ -9,7 +9,7 @@ namespace App.Domain.Entities
     public class Product : BaseEntity<int>, IAuditEntity
     {
         public string Name { get; set; } = default!;
-
+        
         public decimal Price { get; set; }
 
         public int Stock { get; set; }

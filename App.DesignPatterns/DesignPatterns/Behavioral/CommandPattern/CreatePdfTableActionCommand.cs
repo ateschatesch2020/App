@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace App.Application.DesignPatterns.CommandPattern
+namespace App.DesignPatterns.DesignPatterns.Behavioral.CommandPattern
 {
     public class CreatePdfTableActionCommand<T> : ITableButtonActionCommand
     {//Concrete command

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace App.Application.DesignPatterns.CommandPattern.Commands
+namespace App.DesignPatterns.DesignPatterns.Behavioral.CommandPattern
 {
     public class FileCreateInvoker
     {// Invoker
-        private ITableButtonActionCommand _tableActionCommand;
+        private ITableButtonActionCommand? _tableActionCommand;
         private List<ITableButtonActionCommand> tableActionCommands = new List<ITableButtonActionCommand>();
 
         public void SetCommand(ITableButtonActionCommand tableActionCommand)
@@ -23,7 +23,7 @@ namespace App.Application.DesignPatterns.CommandPattern.Commands
 
         public IActionResult CreateFile()
         {
-            return _tableActionCommand.Execute();
+            return _tableActionCommand .Execute();
         }
 
         public List<IActionResult> CreateFiles()

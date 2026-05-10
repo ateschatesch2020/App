@@ -14,6 +14,8 @@
     <Project Path="App.Persistence/App.Persistence.csproj" />
   </Folder>
   <Folder Name="/Test/" />
+  <Project Path="Algorithms/Algorithms.csproj" Id="4a82679e-9e6a-4be8-a8cb-e699bedc1886" />
   <Project Path="App.ConsoleDocker/App.ConsoleDocker.csproj" Id="15c4e4d7-08be-43ff-b746-7ca917610f7d" />
+  <Project Path="App.DesignPatterns/App.DesignPatterns.csproj" Id="1ff4a7fb-a9ae-4a25-b5d2-a5dbc244466f" />
   <Project Path="App.Test/App.Test.csproj" Id="731a0464-19c5-4810-ab0d-5edd675aa5aa" />
 </Solution>
