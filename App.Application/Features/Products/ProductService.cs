@@ -1,7 +1,5 @@
 ﻿using App.Application.Contracts.Caching;
 using App.Application.Contracts.Persistence;
-using App.Application.DesignPatterns.CommandPattern;
-using App.Application.DesignPatterns.CommandPattern.Commands;
 using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
 using App.Application.Features.Products.Update;
@@ -9,6 +7,7 @@ using App.Application.Features.Products.UpdateStock;
 using App.Domain.Entities;
 using AutoMapper;
 using DocumentFormat.OpenXml.Office2016.Excel;
+using App.DesignPatterns.DesignPatterns.Behavioral.CommandPattern;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -44,31 +44,40 @@ using Creator = App.DesignPatterns.DesignPatterns.Test.Factory.Creator;
 #endregion
 
 #region Observer
-//var youtubeChannel = new YoutubeChannelPublisher();
+var youtubeChannel = new YoutubeChannelPublisher();
 
-//var emailSender = new EmailSender();
-//var smsSender = new SmsSender();
+var emailSender = new EmailSender();
+var smsSender = new SmsSender();
 
-//youtubeChannel.VideoPublished += emailSender.OnVideoPublished;
-//youtubeChannel.VideoPublished += smsSender.OnVideoPublished;
+youtubeChannel.VideoPublished += emailSender.OnVideoPublished;
+youtubeChannel.VideoPublished += smsSender.OnVideoPublished;
 
-//youtubeChannel.UploadVideo("Observer Pattern in C#");
+youtubeChannel.UploadVideo("Observer Pattern in C#");
+    
+youtubeChannel.VideoPublishedAsync += async (messeage) =>
+{
+    await Task.Delay(100);
+    throw new Exception("Hata!");       // Yakalalanabilir!
+};
+
+youtubeChannel.UploadVideoAndTriggerAsyncHandler("Observer Pattern with custom handler");
 #endregion
 
-App.DesignPatterns.DesignPatterns.Test.Observer.Observer observer = new();
-App.DesignPatterns.DesignPatterns.Test.Observer.Publisher publisher = new();
-publisher.Published += observer.OnPublished;
-publisher.VideoUpload("new video is uploaded");
+//App.DesignPatterns.DesignPatterns.Test.Observer.Observer observer = new();
+//App.DesignPatterns.DesignPatterns.Test.Observer.Publisher publisher = new();
+//publisher.Published += observer.OnPublished;
+//publisher.VideoUpload("new video is uploaded");
 
-Creator[] creators = new Creator[2];
-creators[0] = new TestBookCreator();
-creators[1] = new TestPenCreator();
 
-foreach (var item in creators)
-{
-    TestProduct testProduct = item.FactoryMethod();
-    Console.WriteLine("Creatted {0}", item.GetType().Name);
-}
+//Creator[] creators = new Creator[2];
+//creators[0] = new TestBookCreator();
+//creators[1] = new TestPenCreator();
+
+//foreach (var item in creators)
+//{
+//    TestProduct testProduct = item.FactoryMethod();
+//    Console.WriteLine("Creatted {0}", item.GetType().Name);
+//}
 
 
 Console.ReadKey();

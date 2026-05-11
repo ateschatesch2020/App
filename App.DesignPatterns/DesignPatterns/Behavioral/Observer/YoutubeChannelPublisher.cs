@@ -12,5 +12,12 @@ namespace App.DesignPatterns.DesignPatterns.Behavioral.Observer
 
             OnVideoPublished(title);
         }
+
+        public async void UploadVideoAndTriggerAsyncHandler(string title)
+        {
+            Console.WriteLine($"New video uploaded: {title}");
+
+            await OnVideoPublishedAsync(title);
+        }
     }
 }

@@ -155,5 +155,7 @@ namespace App.Test
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.GetAll());
         }
+
+
     }
 }

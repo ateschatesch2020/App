@@ -1,5 +1,4 @@
 ﻿using App.API.Filters;
-using App.Application.DesignPatterns.CommandPattern;
 using App.Application.Features.Products;
 using App.Application.Features.Products.Create;
 using App.Application.Features.Products.Dto;
